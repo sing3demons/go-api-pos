@@ -6,6 +6,16 @@ import (
 )
 
 func serveRoutes(r *gin.Engine) {
+	categoryGroup := r.Group("/categories")
+	categoryController := controller.Category{}
+	{
+		categoryGroup.GET("", categoryController.FindAll)
+		categoryGroup.GET("/:id", categoryController.FindOne)
+		categoryGroup.POST("", categoryController.Create)
+		categoryGroup.PATCH("/:id", categoryController.Update)
+		categoryGroup.DELETE("/:id", categoryController.Delete)
+	}
+
 	productGroup := r.Group("/products")
 	productController := controller.Product{}
 	{

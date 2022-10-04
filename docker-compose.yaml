@@ -5,9 +5,9 @@ services:
     image: mariadb:10.8.4
     restart: always
     environment:
-      - MARIADB_ROOT_PASSWORD=P@ssw0rd
+      - MARIADB_ROOT_PASSWORD=Passw0rd
       - MARIADB_USER=kpsing
-      - MARIADB_PASSWORD=P@ssw0rd
+      - MARIADB_PASSWORD=Passw0rd
       - MARIADB_DATABASE=go-pos
     ports:
       - 3306:3306

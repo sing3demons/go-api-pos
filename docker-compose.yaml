@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+  mysql:
+    container_name: mysql
+    image: mariadb:10.8.4
+    restart: always
+    environment:
+      - MARIADB_ROOT_PASSWORD=P@ssw0rd
+      - MARIADB_USER=kpsing
+      - MARIADB_PASSWORD=P@ssw0rd
+      - MARIADB_DATABASE=django_junraider
+    ports:
+      - 3306:3306
+    volumes:
+      - ./_data:/var/lib/mysql
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    depends_on:
+    - mysql
+    ports:
+      - 8080:8080

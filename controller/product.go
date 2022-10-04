@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+	"github.com/sing3demons/pos-app/dto"
 )
 
 type Product struct{}
@@ -25,6 +27,28 @@ func (p Product) FindOne(ctx *gin.Context) {
 		"ID":      id,
 	})
 }
-func (p Product) Create(ctx *gin.Context) {}
+func (p Product) Create(ctx *gin.Context) {
+	var form dto.ProductRequest
+	if err := ctx.ShouldBind(&form); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	imageFile, err := ctx.FormFile("image")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	imagePath := "./uploads/products/" + uuid.New().String() + imageFile.Filename
+	if err := ctx.SaveUploadedFile(imageFile, imagePath); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, gin.H{
+		"Name": form.Name,
+	})
+}
 func (p Product) Update(ctx *gin.Context) {}
 func (p Product) Delete(ctx *gin.Context) {}

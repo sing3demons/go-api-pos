@@ -21,3 +21,5 @@
 go.work
 tmp
 uploads
+_data
+.env

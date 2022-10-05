@@ -2,7 +2,6 @@ package controller
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -31,9 +30,8 @@ func (c Category) FindAll(ctx *gin.Context) {
 }
 
 func (c Category) FindOne(ctx *gin.Context) {
-	id := ctx.Param("id")
-	var category model.Category
-	if err := db.Conn.First(&category, id).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	category, err := findCategoryByID(ctx)
+	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -92,11 +90,7 @@ func (c Category) Update(ctx *gin.Context) {
 
 func (c Category) Delete(ctx *gin.Context) {
 	id := ctx.Param("id")
-	if err := db.Conn.Delete(&model.Category{}, id).Error; err != nil {
-		ctx.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
-		fmt.Println(err)
-		return
-	}
+	db.Conn.Unscoped().Delete(&model.Category{}, id)
 
 	ctx.JSON(http.StatusOK, gin.H{
 		"deletedAt": time.Now(),

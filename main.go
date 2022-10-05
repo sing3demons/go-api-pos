@@ -24,6 +24,7 @@ func init() {
 }
 
 func main() {
+	port := os.Getenv("PORT")
 	db.ConnectDB()
 	db.Migration()
 	os.MkdirAll("uploads/products", 0755)
@@ -32,7 +33,7 @@ func main() {
 	r.Static("/uploads", "./uploads")
 	serveRoutes(r)
 
-	listenAndServe(r, "8080")
+	listenAndServe(r, port)
 }
 
 func listenAndServe(r *gin.Engine, port string) {

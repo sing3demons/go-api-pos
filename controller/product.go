@@ -36,7 +36,7 @@ func (p Product) FindAll(ctx *gin.Context) {
 		query = query.Where("status = ?", status)
 	}
 
-	if err := query.Find(&products).Error; err != nil {
+	if err := query.Order("created_at desc").Find(&products).Error; err != nil {
 		ctx.JSON(http.StatusUnprocessableEntity, gin.H{"error": err.Error()})
 		return
 	}

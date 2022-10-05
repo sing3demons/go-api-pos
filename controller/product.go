@@ -96,8 +96,12 @@ func (p Product) Create(ctx *gin.Context) {
 		return
 	}
 
+	path := "uploads/products/"
+	os.MkdirAll(path, 0755)
+
 	fileName := strings.Split(imageFile.Filename, ".")[1]
-	imagePath := "./uploads/products/" + uuid.New().String() + "." + fileName
+	imagePath := path + uuid.New().String() + "." + fileName
+
 	if err := ctx.SaveUploadedFile(imageFile, imagePath); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -148,7 +152,7 @@ func (p Product) Update(ctx *gin.Context) {
 
 	if imageFile != nil {
 		fileName := strings.Split(imageFile.Filename, ".")[1]
-		imagePath := "./uploads/products/" + uuid.New().String() + "." + fileName
+		imagePath := "uploads/products/" + uuid.New().String() + "." + fileName
 		if err := ctx.SaveUploadedFile(imageFile, imagePath); err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return

@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/sing3demons/pos-app/model"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -19,4 +20,13 @@ func ConnectDB() {
 	}
 
 	Conn = db
+}
+
+func Migration() {
+	Conn.AutoMigrate(
+		&model.Category{},
+		&model.Product{},
+		&model.Order{},
+		&model.OrderItem{},
+	)
 }

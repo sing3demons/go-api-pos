@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -40,7 +41,8 @@ func (p Product) Create(ctx *gin.Context) {
 		return
 	}
 
-	imagePath := "./uploads/products/" + uuid.New().String() + imageFile.Filename
+	fileName := strings.Split(imageFile.Filename, ".")[1]
+	imagePath := "./uploads/products/" + uuid.New().String() + "." + fileName
 	if err := ctx.SaveUploadedFile(imageFile, imagePath); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
